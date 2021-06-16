@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nonogram</title>
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+    }
+    .plant {
+      position: fixed;
+      bottom: 0;
+      right: 0;
+      padding: 1%;
+    }
+  </style>
+  <script src="./lib/p5.js"></script>
+  <script src="sketch.js"></script>
+  <style>
+    div#win {
+      font-size: xx-large;
+      padding-left: 10%;
+    }
+    .levels {
+      padding: 1%;
+    }
+  </style>
+</head>
+
+<body>
+  <form class="levels" method="post"> 
+    <label for="level">Level: </label>
+    <select name="level" id="level" autocomplete="off">
+	<option>Dumb Disk Failure Broke This</option>
+    </select>
+  </form>
+  <main>
+  </main>
+    <div id="win" class="plant"></div>
+</body>
+
+</html>
