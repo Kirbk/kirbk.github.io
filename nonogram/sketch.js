@@ -5,6 +5,8 @@ var max_width = 0, max_height = 0;
 var board, vert_wall, horiz_wall;
 var sol = false;
 
+var difficulty = 0.5;
+
 function setupRandom() {
   horiz = 10;
   vert  = 10;
@@ -20,7 +22,7 @@ function setupRandom() {
 
   for (var i = 0; i < vert; i++) {
     for (var j = 0; j < horiz; j++) {
-      board[i][j] = new Cell(Math.random() > 0.5);
+      board[i][j] = new Cell(Math.random() > difficulty);
     }
   }
 
@@ -86,6 +88,9 @@ function waitForElement(){
 }
 
 async function initialize() {
+  difficulty = map(document.getElementById("difficulty").value, 0, 100, 0, 1, true)
+  
+
   if (typeof filename !== 'undefined') {
     var lvl = atob(filename);
     if (lvl === "none") {
