@@ -167,7 +167,7 @@ function update(x, y) {
 }
 
 function rewrite(solution = false) {
-  background(255);
+  background(242, 255, 254);
   for (var i = 0; i < vert; i++) {
     for (var j = 0; j < horiz; j++) {
       fill(255);
