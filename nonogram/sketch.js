@@ -138,6 +138,7 @@ function setup() {
 
   set_difficulty_button.onclick = function() {
     difficulty = difficulty_slider.value;
+    document.getElementById("win").innerHTML = "You win!";
     setupRandom();
     rewrite();
   };
@@ -208,6 +209,7 @@ function keyPressed() {
   if (key === 'n') {
     for (var i = 0; i < vert; i++) {
       for (var j = 0; j < horiz; j++) {
+        document.getElementById("win").innerHTML = "";
         board[i][j].active = false;
         board[i][j].cant = false;
         rewrite();
