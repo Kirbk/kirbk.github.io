@@ -138,7 +138,6 @@ function setup() {
 
   set_difficulty_button.onclick = function() {
     difficulty = difficulty_slider.value;
-    document.getElementById("win").innerHTML = "You win!";
     setupRandom();
     rewrite();
   };
