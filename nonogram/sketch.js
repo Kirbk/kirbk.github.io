@@ -297,7 +297,7 @@ class Cell {
     this.cant = false;
 
     if (lit) {
-      winCells.push(self);
+      winCells.push(this);
     }
   }
 }
