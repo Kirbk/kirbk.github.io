@@ -214,27 +214,12 @@ function giveHint() {
   if (hintType == 0) {
     const unsolved = [];
     winCells.forEach(element => {
-      // if (!board[element[0]][element[1]].active)
-      //   unsolved.push([element[0], element[1]]);
-      // console.log("coords: " + element[0] + " " + element[1]);
       if (!element.active)
         unsolved.push(element);
     });
 
     let hintIdx = randomIntFromInterval(0, unsolved.length - 1);
-    console.log("setting " + hintIdx + " to active")
-    // console.log("selected coords: " + unsolved[hintIdx][0] + " " + unsolved[hintIdx][1]);
     unsolved[hintIdx].active = true;
-    // board[unsolved[hintIdx][0]][unsolved[hintIdx][1]].active = true;
-
-    // board.forEach(element => {
-    //   if (element.includes(unsolved[hintIdx])) {
-    //     let idx = element.indexOf(unsolved[hintIdx]);
-    //     console.log("Found the cell");
-    //     element[idx].active = true;
-    //     // break;
-    //   }
-    // });
   }
   else if (hintType == 1) {
     const cantList = [];
@@ -246,18 +231,8 @@ function giveHint() {
     });
 
     let targetCell = random(cantList);
-    console.log("marking " + targetCell + " as can't")
     targetCell.cant = true;
   }
-
-  // while (true) {
-  //   let cell = random(random(board));
-  //   if (cell.lit && !cell.active) {
-  //     cell.active = true;
-  //     rewrite();
-  //     break;
-  //   }
-  // }
 }
 
 function keyPressed() {
