@@ -213,7 +213,8 @@ function giveHint() {
   if (hintType == 0) {
     const unsolved = [];
     winCells.forEach(element => {
-      if (!board[element[0]][element[1]].active) unsolved.push([element[0]], [element[1]]);
+      if (!board[element[0]][element[1]].active)
+        unsolved.push([element[0], element[1]]);
       console.log("coords: " + element[0] + " " + element[1]);
     });
 
