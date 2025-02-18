@@ -210,7 +210,7 @@ function giveHint() {
   if (hintType == 0) {
     const unsolved = [];
     winCells.forEach(element => {
-      if (!element.active) unsolved.push(element);
+      if (!element.active) unsolved.push(structuredClone(element));
     });
 
     let hintIdx = randomIntFromInterval(0, unsolved.length - 1);
@@ -222,7 +222,7 @@ function giveHint() {
     board.forEach(element => {
       element.forEach(cell => {
         if (!cell.lit && !cell.active && !cell.cant)
-          cantList.push(cell);
+          cantList.push(structuredClone(cell));
       });
     });
 
