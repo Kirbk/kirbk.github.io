@@ -219,7 +219,7 @@ function giveHint() {
     let hintIdx = randomIntFromInterval(0, unsolved.length - 1);
     console.log("setting " + hintIdx + " to active")
     // unsolved[hintIdx].active = true;
-    board[element[0]][element[1]].active = true;
+    board[unsolved[hintIdx][0]][unsolved[hintIdx][1]].active = true;
 
     // board.forEach(element => {
     //   if (element.includes(unsolved[hintIdx])) {
