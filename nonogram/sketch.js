@@ -213,13 +213,13 @@ function giveHint() {
   if (hintType == 0) {
     const unsolved = [];
     winCells.forEach(element => {
-      if (!board[element[0]][element[1]].active) unsolved.push(board[element[0]][element[1]]);
+      if (!board[element[0]][element[1]].active) unsolved.push([element[0]], [element[1]]);
       console.log("coords: " + element[0] + " " + element[1]);
     });
 
     let hintIdx = randomIntFromInterval(0, unsolved.length - 1);
     console.log("setting " + hintIdx + " to active")
-    console.log("selected coords: " + element[0] + " " + element[1]);
+    console.log("selected coords: " + unsolved[hintIdx][0] + " " + unsolved[hintIdx][1]);
     // unsolved[hintIdx].active = true;
     board[unsolved[hintIdx][0]][unsolved[hintIdx][1]].active = true;
 
