@@ -3,6 +3,7 @@ var vert  = 0;
 var cell_width = 0, cell_height = 0;
 var max_width = 0, max_height = 0;
 var board, vert_wall, horiz_wall;
+const winCells = [];
 var sol = false;
 
 var difficulty = 50;
@@ -198,6 +199,45 @@ function rewrite(solution = false) {
   }
 }
 
+function randomIntFromInterval(min, max) { // min and max included 
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+function giveHint() {
+  if (checkWin()) return;
+  let hintType = randomIntFromInterval(0, 1);
+  if (hintType == 0) {
+    const unsolved = [];
+    winCells.forEach(element => {
+      if (!element.active) unsolved.push(element);
+    });
+
+    let hintIdx = randomIntFromInterval(0, unsolved.length - 1);
+    unsolved[hintIdx].active = true;
+  }
+  else if (hintType == 1) {
+    const cantList = [];
+    board.forEach(element => {
+      element.forEach(cell => {
+        if (!cell.lit && !cell.active && !cell.cant)
+          cantList.push(cell);
+      });
+    });
+
+    let targetCell = random(cantList);
+    targetCell.cant = true;
+  }
+
+  // while (true) {
+  //   let cell = random(random(board));
+  //   if (cell.lit && !cell.active) {
+  //     cell.active = true;
+  //     rewrite();
+  //     break;
+  //   }
+  // }
+}
+
 function keyPressed() {
   if (key === 's') {
     sol = true;
@@ -218,15 +258,7 @@ function keyPressed() {
   }
 
   if (key === 'h') {
-    if (checkWin()) return;
-    while (true) {
-      let cell = random(random(board));
-      if (cell.lit && !cell.active) {
-        cell.active = true;
-        rewrite();
-        break;
-      }
-    }
+    giveHint();
   }
 }
 
@@ -262,5 +294,9 @@ class Cell {
     this.lit = lit;
     this.active = false;
     this.cant = false;
+
+    if (lit) {
+      winCells.push(self);
+    }
   }
 }
