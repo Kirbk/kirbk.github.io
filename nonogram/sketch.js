@@ -208,7 +208,6 @@ function randomIntFromInterval(min, max) { // min and max included
 }
 
 function giveHint() {
-  if (checkWin()) return;
   let hintType = randomIntFromInterval(0, 1);
   console.log("Hint type = " + hintType)
   if (hintType == 0) {
@@ -233,6 +232,8 @@ function giveHint() {
     let targetCell = random(cantList);
     targetCell.cant = true;
   }
+
+  if (checkWin()) document.getElementById("win").innerHTML = "You win!";
 }
 
 function keyPressed() {
