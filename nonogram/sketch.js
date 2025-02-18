@@ -23,7 +23,10 @@ function setupRandom() {
 
   for (var i = 0; i < vert; i++) {
     for (var j = 0; j < horiz; j++) {
-      board[i][j] = new Cell(Math.random() > (difficulty / 100.));
+      let is_lit = Math.random() > (difficulty / 100.);
+      board[i][j] = new Cell(is_lit);
+      if (is_lit)
+        winCells.push([i, j]);
     }
   }
 
@@ -210,20 +213,22 @@ function giveHint() {
   if (hintType == 0) {
     const unsolved = [];
     winCells.forEach(element => {
-      if (!element.active) unsolved.push(element);
+      if (!board[element[0]][element[1]].active) unsolved.push(board[element[0]][element[1]]);
     });
 
     let hintIdx = randomIntFromInterval(0, unsolved.length - 1);
     console.log("setting " + hintIdx + " to active")
     // unsolved[hintIdx].active = true;
+    board[element[0]][element[1]].active = true;
 
-    board.forEach(element => {
-      if (element.includes(unsolved[hintIdx])) {
-        let idx = element.indexOf(unsolved[hintIdx]);
-        element[idx].active = true;
-        // break;
-      }
-    });
+    // board.forEach(element => {
+    //   if (element.includes(unsolved[hintIdx])) {
+    //     let idx = element.indexOf(unsolved[hintIdx]);
+    //     console.log("Found the cell");
+    //     element[idx].active = true;
+    //     // break;
+    //   }
+    // });
   }
   else if (hintType == 1) {
     const cantList = [];
@@ -305,9 +310,5 @@ class Cell {
     this.lit = lit;
     this.active = false;
     this.cant = false;
-
-    if (lit) {
-      winCells.push(this);
-    }
   }
 }
