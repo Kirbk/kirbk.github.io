@@ -11,6 +11,7 @@ var difficulty = 50;
 function setupRandom() {
   horiz = 10;
   vert  = 10;
+  winCells = [];
 
   board = new Array(vert);
   for (var i = 0; i < vert; i++) board[i] = new Array(horiz);
@@ -93,8 +94,6 @@ function waitForElement(){
 }
 
 async function initialize() {
-  winCells = [];
-  console.log(winCells);
   if (typeof filename !== 'undefined') {
     var lvl = atob(filename);
     if (lvl === "none") {
@@ -106,7 +105,6 @@ async function initialize() {
   } else {
     setupRandom();
   }
-  console.log(winCells);
 }
 
 document.oncontextmenu = function() {
