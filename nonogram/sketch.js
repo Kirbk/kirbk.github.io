@@ -9,6 +9,37 @@ var sol = false;
 var difficulty = 50;
 var hasWon = false;
 var usedHint = false;
+var undoStack = [];
+var hintCount = 0;
+
+function snapshotCell(cell) {
+  return { cell: cell, active: cell.active, cant: cell.cant };
+}
+
+function pushUndo(changes, wasHint) {
+  undoStack.push({ changes: changes, wasHint: !!wasHint });
+}
+
+function resetUndoState() {
+  undoStack = [];
+  hintCount = 0;
+}
+
+function undo() {
+  if (undoStack.length === 0) return;
+  var entry = undoStack.pop();
+  entry.changes.forEach(function(c) {
+    c.cell.active = c.active;
+    c.cell.cant = c.cant;
+  });
+  if (entry.wasHint) {
+    hintCount = Math.max(0, hintCount - 1);
+    if (hintCount === 0) usedHint = false;
+  }
+  hasWon = false;
+  document.getElementById("win").innerHTML = "";
+  rewrite();
+}
 
 // Global wins counter via abacus.jasoncameron.dev (free public counter API).
 var WINS_NAMESPACE = "kirbk-nonogram-v1";
@@ -73,6 +104,7 @@ function setupRandom() {
   winCells = [];
   hasWon = false;
   usedHint = false;
+  resetUndoState();
 
   board = new Array(vert);
   for (var i = 0; i < vert; i++) board[i] = new Array(horiz);
@@ -126,6 +158,7 @@ function start() {
   horiz = b.level_data[0].length;
   hasWon = false;
   usedHint = false;
+  resetUndoState();
 
   board = new Array(vert);
   for (var i = 0; i < vert; i++) board[i] = new Array(horiz);
@@ -278,9 +311,9 @@ function randomIntFromInterval(min, max) { // min and max included
 }
 
 function giveHint() {
-  usedHint = true;
   let hintType = randomIntFromInterval(0, 1);
   console.log("Hint type = " + hintType)
+  var changed = null;
   if (hintType == 0) {
     const unsolved = [];
     winCells.forEach(element => {
@@ -290,6 +323,7 @@ function giveHint() {
 
     if (unsolved.length > 0) {
       let hintIdx = randomIntFromInterval(0, unsolved.length - 1);
+      changed = snapshotCell(unsolved[hintIdx]);
       unsolved[hintIdx].active = true;
     }
   }
@@ -304,8 +338,15 @@ function giveHint() {
 
     if (cantList.length > 0) {
       let targetCell = random(cantList);
+      changed = snapshotCell(targetCell);
       targetCell.cant = true;
     }
+  }
+
+  if (changed) {
+    usedHint = true;
+    hintCount++;
+    pushUndo([changed], true);
   }
 
   if (checkWin()) {
@@ -326,21 +367,37 @@ function keyPressed() {
   }
 
   if (key === 'n') {
-    hasWon = false;
-    usedHint = false;
+    var snapshots = [];
     for (var i = 0; i < vert; i++) {
       for (var j = 0; j < horiz; j++) {
-        document.getElementById("win").innerHTML = "";
-        board[i][j].active = false;
-        board[i][j].cant = false;
-        rewrite();
+        if (board[i][j].active || board[i][j].cant) {
+          snapshots.push(snapshotCell(board[i][j]));
+        }
       }
     }
+    if (snapshots.length > 0) {
+      pushUndo(snapshots, false);
+    }
+    hasWon = false;
+    usedHint = false;
+    hintCount = 0;
+    document.getElementById("win").innerHTML = "";
+    for (var i = 0; i < vert; i++) {
+      for (var j = 0; j < horiz; j++) {
+        board[i][j].active = false;
+        board[i][j].cant = false;
+      }
+    }
+    rewrite();
   }
 
   if (key === 'h') {
     giveHint();
     rewrite();
+  }
+
+  if (key === 'z' || key === 'Z') {
+    undo();
   }
 }
 
@@ -356,9 +413,12 @@ function mousePressed() {
   let x = Math.floor(mouseX / cell_width - (max_height / 2));
   let y = Math.floor(mouseY / cell_height - (max_width / 2));
   if (x < horiz && y < vert && x >= 0 && y >= 0) {
-    if (mouseButton === LEFT)
+    if (mouseButton === LEFT) {
+      pushUndo([snapshotCell(board[y][x])], false);
       board[y][x].active = !board[y][x].active;
+    }
     else if (mouseButton === RIGHT) {
+      pushUndo([snapshotCell(board[y][x])], false);
       board[y][x].cant = !board[y][x].cant;
     }
     update(x, y);
