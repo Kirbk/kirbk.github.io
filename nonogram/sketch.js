@@ -3,7 +3,7 @@ var vert  = 0;
 var cell_width = 0, cell_height = 0;
 var max_width = 0, max_height = 0;
 var board, vert_wall, horiz_wall;
-const winCells = [];
+var winCells = [];
 var sol = false;
 
 var difficulty = 50;
