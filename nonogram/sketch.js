@@ -26,7 +26,8 @@ function setupRandom() {
       let is_lit = Math.random() > (difficulty / 100.);
       board[i][j] = new Cell(is_lit);
       if (is_lit)
-        winCells.push([i, j]);
+        winCells.push(board[i][j]);
+        // winCells.push([i, j]);
     }
   }
 
@@ -213,16 +214,18 @@ function giveHint() {
   if (hintType == 0) {
     const unsolved = [];
     winCells.forEach(element => {
-      if (!board[element[0]][element[1]].active)
-        unsolved.push([element[0], element[1]]);
-      console.log("coords: " + element[0] + " " + element[1]);
+      // if (!board[element[0]][element[1]].active)
+      //   unsolved.push([element[0], element[1]]);
+      // console.log("coords: " + element[0] + " " + element[1]);
+      if (!element.active)
+        unsolved.push(element);
     });
 
     let hintIdx = randomIntFromInterval(0, unsolved.length - 1);
     console.log("setting " + hintIdx + " to active")
-    console.log("selected coords: " + unsolved[hintIdx][0] + " " + unsolved[hintIdx][1]);
-    // unsolved[hintIdx].active = true;
-    board[unsolved[hintIdx][0]][unsolved[hintIdx][1]].active = true;
+    // console.log("selected coords: " + unsolved[hintIdx][0] + " " + unsolved[hintIdx][1]);
+    unsolved[hintIdx].active = true;
+    // board[unsolved[hintIdx][0]][unsolved[hintIdx][1]].active = true;
 
     // board.forEach(element => {
     //   if (element.includes(unsolved[hintIdx])) {
