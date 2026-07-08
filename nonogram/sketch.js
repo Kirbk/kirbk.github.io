@@ -221,7 +221,7 @@ function giveHint() {
       if (element.includes(unsolved[hintIdx])) {
         let idx = element.indexOf(unsolved[hintIdx]);
         element[idx].active = true;
-        break;
+        // break;
       }
     });
   }
