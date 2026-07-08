@@ -93,6 +93,7 @@ function waitForElement(){
 }
 
 async function initialize() {
+  winCells = [];
   if (typeof filename !== 'undefined') {
     var lvl = atob(filename);
     if (lvl === "none") {
@@ -104,8 +105,6 @@ async function initialize() {
   } else {
     setupRandom();
   }
-
-  winCells = [];
 }
 
 document.oncontextmenu = function() {
