@@ -10,7 +10,7 @@ var difficulty = 0.5;
 var difficulty_slider = document.getElementById("difficulty");
 var set_difficulty_button = document.getElementById("diff_button");
 
-set_difficulty_button.oninput = function() {
+set_difficulty_button.onclick = function() {
   difficulty = difficulty_slider.value;
   setupRandom();
   rewrite();
