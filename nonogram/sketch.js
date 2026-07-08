@@ -278,6 +278,7 @@ function keyPressed() {
 
   if (key === 'h') {
     giveHint();
+    rewrite();
   }
 }
 
