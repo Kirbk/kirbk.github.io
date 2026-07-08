@@ -7,6 +7,14 @@ var sol = false;
 
 var difficulty = 0.5;
 
+var difficulty_slider = document.getElementById("difficulty");
+var set_difficulty_button = document.getElementById("diff_button");
+
+set_difficulty_button.oninput = function() {
+  difficulty = difficulty_slider.value;
+  setupRandom();
+} 
+
 function setupRandom() {
   horiz = 10;
   vert  = 10;
@@ -22,7 +30,7 @@ function setupRandom() {
 
   for (var i = 0; i < vert; i++) {
     for (var j = 0; j < horiz; j++) {
-      board[i][j] = new Cell(Math.random() > difficulty);
+      board[i][j] = new Cell(Math.random() > (difficulty / 100.));
     }
   }
 
@@ -88,9 +96,6 @@ function waitForElement(){
 }
 
 async function initialize() {
-  difficulty = map(document.getElementById("difficulty").value, 0, 100, 0, 1, true)
-  
-
   if (typeof filename !== 'undefined') {
     var lvl = atob(filename);
     if (lvl === "none") {
