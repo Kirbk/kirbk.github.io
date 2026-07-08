@@ -8,6 +8,7 @@ var sol = false;
 
 var difficulty = 50;
 var hasWon = false;
+var usedHint = false;
 
 // Global wins counter via abacus.jasoncameron.dev (free public counter API).
 var WINS_NAMESPACE = "kirbk-nonogram-v1";
@@ -62,6 +63,7 @@ function incrementWin() {
 function handleWinDetected() {
   if (hasWon) return;
   hasWon = true;
+  if (usedHint) return;
   incrementWin();
 }
 
@@ -70,6 +72,7 @@ function setupRandom() {
   vert  = 10;
   winCells = [];
   hasWon = false;
+  usedHint = false;
 
   board = new Array(vert);
   for (var i = 0; i < vert; i++) board[i] = new Array(horiz);
@@ -122,6 +125,7 @@ function start() {
   vert = b.level_data.length;
   horiz = b.level_data[0].length;
   hasWon = false;
+  usedHint = false;
 
   board = new Array(vert);
   for (var i = 0; i < vert; i++) board[i] = new Array(horiz);
@@ -274,6 +278,7 @@ function randomIntFromInterval(min, max) { // min and max included
 }
 
 function giveHint() {
+  usedHint = true;
   let hintType = randomIntFromInterval(0, 1);
   console.log("Hint type = " + hintType)
   if (hintType == 0) {
@@ -322,6 +327,7 @@ function keyPressed() {
 
   if (key === 'n') {
     hasWon = false;
+    usedHint = false;
     for (var i = 0; i < vert; i++) {
       for (var j = 0; j < horiz; j++) {
         document.getElementById("win").innerHTML = "";
