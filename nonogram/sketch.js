@@ -214,6 +214,7 @@ function giveHint() {
     });
 
     let hintIdx = randomIntFromInterval(0, unsolved.length - 1);
+    console.log("setting " + hintIdx + " to active")
     unsolved[hintIdx].active = true;
   }
   else if (hintType == 1) {
@@ -226,6 +227,7 @@ function giveHint() {
     });
 
     let targetCell = random(cantList);
+    console.log("marking " + hintIdx + " as can't")
     targetCell.cant = true;
   }
 
