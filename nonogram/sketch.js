@@ -215,7 +215,15 @@ function giveHint() {
 
     let hintIdx = randomIntFromInterval(0, unsolved.length - 1);
     console.log("setting " + hintIdx + " to active")
-    unsolved[hintIdx].active = true;
+    // unsolved[hintIdx].active = true;
+
+    board.forEach(element => {
+      if (element.includes(unsolved[hintIdx])) {
+        let idx = element.indexOf(unsolved[hintIdx]);
+        element[idx].active = true;
+        break;
+      }
+    });
   }
   else if (hintType == 1) {
     const cantList = [];
