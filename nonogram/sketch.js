@@ -5,7 +5,7 @@ var max_width = 0, max_height = 0;
 var board, vert_wall, horiz_wall;
 var sol = false;
 
-var difficulty = 0.5;
+var difficulty = 50;
 
 var difficulty_slider = document.getElementById("difficulty");
 var set_difficulty_button = document.getElementById("diff_button");
