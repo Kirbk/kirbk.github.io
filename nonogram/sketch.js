@@ -217,8 +217,10 @@ function giveHint() {
         unsolved.push(element);
     });
 
-    let hintIdx = randomIntFromInterval(0, unsolved.length - 1);
-    unsolved[hintIdx].active = true;
+    if (unsolved.length > 0) {
+      let hintIdx = randomIntFromInterval(0, unsolved.length - 1);
+      unsolved[hintIdx].active = true;
+    }
   }
   else if (hintType == 1) {
     const cantList = [];
@@ -229,8 +231,10 @@ function giveHint() {
       });
     });
 
-    let targetCell = random(cantList);
-    targetCell.cant = true;
+    if (cantList.length > 0) {
+      let targetCell = random(cantList);
+      targetCell.cant = true;
+    }
   }
 
   if (checkWin()) document.getElementById("win").innerHTML = "You win!";
