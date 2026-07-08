@@ -104,6 +104,8 @@ async function initialize() {
   } else {
     setupRandom();
   }
+
+  winCells = [];
 }
 
 document.oncontextmenu = function() {
