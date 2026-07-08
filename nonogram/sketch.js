@@ -7,9 +7,6 @@ var sol = false;
 
 var difficulty = 50;
 
-var difficulty_slider = document.getElementById("difficulty");
-var set_difficulty_button = document.getElementById("diff_button");
-
 function setupRandom() {
   horiz = 10;
   vert  = 10;
@@ -135,6 +132,9 @@ function getWalls() {
 function setup() {
   noLoop();
   initialize();
+
+  var difficulty_slider = document.getElementById("difficulty");
+  var set_difficulty_button = document.getElementById("diff_button");
 
   set_difficulty_button.onclick = function() {
     difficulty = difficulty_slider.value;
