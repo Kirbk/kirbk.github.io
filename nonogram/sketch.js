@@ -7,11 +7,69 @@ var winCells = [];
 var sol = false;
 
 var difficulty = 50;
+var hasWon = false;
+
+// Global wins counter via abacus.jasoncameron.dev (free public counter API).
+var WINS_NAMESPACE = "kirbk-nonogram-v1";
+var DIFFICULTY_LEVELS = [20, 30, 40, 50, 60, 70, 80];
+var winsCache = {};
+
+function winsKey(diff) {
+  return "wins-diff-" + diff;
+}
+
+function renderWins() {
+  var listEl = document.getElementById("wins-list");
+  if (!listEl) return;
+  listEl.innerHTML = DIFFICULTY_LEVELS.map(function(d) {
+    var val = winsCache[d];
+    var display = (typeof val === "number") ? val : "?";
+    var cls = (Number(d) === Number(difficulty)) ? "win-item current" : "win-item";
+    return '<span class="' + cls + '">Diff ' + d + ': ' + display + '</span>';
+  }).join("");
+}
+
+function fetchAllWins() {
+  DIFFICULTY_LEVELS.forEach(function(d) {
+    fetch("https://abacus.jasoncameron.dev/get/" + WINS_NAMESPACE + "/" + winsKey(d))
+      .then(function(r) { return r.ok ? r.json() : null; })
+      .then(function(data) {
+        if (data && typeof data.value === "number") {
+          winsCache[d] = data.value;
+        } else {
+          // Key may not exist yet; treat as 0.
+          winsCache[d] = winsCache[d] || 0;
+        }
+        renderWins();
+      })
+      .catch(function() { renderWins(); });
+  });
+}
+
+function incrementWin() {
+  var d = Number(difficulty);
+  fetch("https://abacus.jasoncameron.dev/hit/" + WINS_NAMESPACE + "/" + winsKey(d))
+    .then(function(r) { return r.ok ? r.json() : null; })
+    .then(function(data) {
+      if (data && typeof data.value === "number") {
+        winsCache[d] = data.value;
+        renderWins();
+      }
+    })
+    .catch(function() {});
+}
+
+function handleWinDetected() {
+  if (hasWon) return;
+  hasWon = true;
+  incrementWin();
+}
 
 function setupRandom() {
   horiz = 10;
   vert  = 10;
   winCells = [];
+  hasWon = false;
 
   board = new Array(vert);
   for (var i = 0; i < vert; i++) board[i] = new Array(horiz);
@@ -63,6 +121,7 @@ var loaded = false;
 function start() {
   vert = b.level_data.length;
   horiz = b.level_data[0].length;
+  hasWon = false;
 
   board = new Array(vert);
   for (var i = 0; i < vert; i++) board[i] = new Array(horiz);
@@ -147,7 +206,10 @@ function setup() {
     document.getElementById("win").innerHTML = "";
     setupRandom();
     rewrite();
+    renderWins();
   };
+
+  fetchAllWins();
 }
 
 function checkWin() {
@@ -170,7 +232,10 @@ function update(x, y) {
   if (board[y][x].active) fill(51);
   rect((x + (max_height / 2)) * cell_width, (y + (max_width / 2)) * cell_height, cell_width, cell_height);
 
-  if (checkWin()) document.getElementById("win").innerHTML = "You win!";
+  if (checkWin()) {
+    document.getElementById("win").innerHTML = "You win!";
+    handleWinDetected();
+  }
 }
 
 function rewrite(solution = false) {
@@ -238,7 +303,10 @@ function giveHint() {
     }
   }
 
-  if (checkWin()) document.getElementById("win").innerHTML = "You win!";
+  if (checkWin()) {
+    document.getElementById("win").innerHTML = "You win!";
+    handleWinDetected();
+  }
 }
 
 function keyPressed() {
@@ -246,10 +314,14 @@ function keyPressed() {
     sol = true;
     rewrite(true);
   }
-  if (key === 'c')
-    document.getElementById("win").innerHTML = checkWin() ? "You win!" : "Not quite!";
+  if (key === 'c') {
+    var won = checkWin();
+    document.getElementById("win").innerHTML = won ? "You win!" : "Not quite!";
+    if (won) handleWinDetected();
+  }
 
   if (key === 'n') {
+    hasWon = false;
     for (var i = 0; i < vert; i++) {
       for (var j = 0; j < horiz; j++) {
         document.getElementById("win").innerHTML = "";

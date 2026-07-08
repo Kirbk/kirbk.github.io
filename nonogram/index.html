@@ -28,6 +28,28 @@
     .slidecontainer {
       padding: 1%;
     }
+    #wins-container {
+      padding: 1%;
+      font-family: sans-serif;
+    }
+    #wins-container h3 {
+      margin: 0 0 0.5em 0;
+    }
+    #wins-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75em;
+      font-size: 0.95em;
+    }
+    #wins-list .win-item {
+      background: #e0f7f5;
+      padding: 0.35em 0.75em;
+      border-radius: 4px;
+    }
+    #wins-list .win-item.current {
+      background: #b8ebe6;
+      font-weight: bold;
+    }
   </style>
 </head>
 
@@ -36,6 +58,10 @@
     <label>Difficulty</label>
     <input type="range" min="20" max="80" value="50" step="10" class="slider" id="difficulty" />
     <input type="button" id="diff_button" value="Set Difficulty" /> 
+  </div>
+  <div id="wins-container">
+    <h3>Total wins (global)</h3>
+    <div id="wins-list">Loading&hellip;</div>
   </div>
   <main>
   </main>
