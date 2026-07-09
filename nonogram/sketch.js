@@ -8,6 +8,7 @@ var sol = false;
 
 var difficulty = 50;
 var hasWon = false;
+var winCounted = false;
 var usedHint = false;
 var undoStack = [];
 var hintCount = 0;
@@ -95,6 +96,8 @@ function handleWinDetected() {
   if (hasWon) return;
   hasWon = true;
   if (usedHint) return;
+  if (winCounted) return;
+  winCounted = true;
   incrementWin();
 }
 
@@ -103,6 +106,7 @@ function setupRandom() {
   vert  = 10;
   winCells = [];
   hasWon = false;
+  winCounted = false;
   usedHint = false;
   resetUndoState();
 
@@ -157,6 +161,7 @@ function start() {
   vert = b.level_data.length;
   horiz = b.level_data[0].length;
   hasWon = false;
+  winCounted = false;
   usedHint = false;
   resetUndoState();
 
